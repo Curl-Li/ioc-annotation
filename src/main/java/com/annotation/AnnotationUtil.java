@@ -87,8 +87,9 @@ public class AnnotationUtil {
 
             if (method.isAnnotationPresent(Bean.class)) {
                 try {
-                    objects.add(method.invoke(clz));
-                } catch (IllegalAccessException | InvocationTargetException e) {
+                    Object o=method.invoke(clz.newInstance());
+                    objects.add(o);
+                } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
                     throw new AnnotationInjectionException("Bean注入失败");
                 }
             }

@@ -15,13 +15,18 @@ public class Main {
     @Autowired
     private static TestService service;
 
+    @Autowired
+    private static TestBeanComponent testBeanComponent;
+
     public static void main(String[] args) throws AnnotationInjectionException, ScanPackageException, ValueInjectionException {
 
-        PropertiesUtils.setFilename("/Volumes/DATA/Project/Java/ioc-annotation/src/main/resources/config.yml");
+        PropertiesUtils.setFilename("src/main/resources/config.yml");
 
         AnnotationUtil.init(EnvironmentType.DEVELOPMENT,Main.class);
 
         service.run();
+
+        testBeanComponent.run();
 
     }
 
