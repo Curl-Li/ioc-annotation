@@ -202,18 +202,15 @@ public class AnnotationUtil {
                         Method m = clz.getMethod("set" + name, String.class);
                         // invoke方法传递实例对象，因为要对实例处理，而不是类
                         m.invoke(obj, propertiedValue);
-                    }
-                    // int Integer类型
-                    if (type.equals("class java.lang.Integer")) {
+                    }else if (type.equals("class java.lang.Integer")) {
+                        // int Integer类型
                         Method m = clz.getMethod("set" + name, Integer.class);
                         m.invoke(obj, Integer.parseInt(propertiedValue));
-                    }
-                    if (type.equals("int")) {
+                    }else if (type.equals("int")) {
                         Method m = clz.getMethod("set" + name, int.class);
                         m.invoke(obj, (int) Integer.parseInt(propertiedValue));
-                    }
-                    // boolean Boolean类型
-                    if (type.equals("class java.lang.Boolean")) {
+                    }else if (type.equals("class java.lang.Boolean")) {
+                        // boolean Boolean类型
                         Method m = clz.getMethod("set" + name, Boolean.class);
                         if (propertiedValue.equalsIgnoreCase("true")) {
                             m.invoke(obj, true);
@@ -221,8 +218,7 @@ public class AnnotationUtil {
                         if (propertiedValue.equalsIgnoreCase("false")) {
                             m.invoke(obj, true);
                         }
-                    }
-                    if (type.equals("boolean")) {
+                    }else if (type.equals("boolean")) {
                         Method m = clz.getMethod("set" + name, boolean.class);
                         if (propertiedValue.equalsIgnoreCase("true")) {
                             m.invoke(obj, true);
@@ -230,20 +226,24 @@ public class AnnotationUtil {
                         if (propertiedValue.equalsIgnoreCase("false")) {
                             m.invoke(obj, true);
                         }
-                    }
-                    // long Long 数据类型
-                    if (type.equals("class java.lang.Long")) {
+                    }else if (type.equals("class java.lang.Long")) {
+                        // long Long 数据类型
                         Method m = clz.getMethod("set" + name, Long.class);
                         m.invoke(obj, Long.parseLong(propertiedValue));
-                    }
-                    if (type.equals("long")) {
+                    }else if (type.equals("long")) {
                         Method m = clz.getMethod("set" + name, long.class);
                         m.invoke(obj, Long.parseLong(propertiedValue));
-                    }
-                    // 时间数据类型
-                    if (type.equals("class java.util.Date")) {
+                    }else if (type.equals("class java.util.Date")) {
+                        // 时间数据类型
                         Method m = clz.getMethod("set" + name, java.util.Date.class);
                         m.invoke(obj, propertiedValue);
+                    }else if(type.equals("class java.lang.Double")){
+                        // double Double 类型
+                        Method m = clz.getMethod("set" + name, java.lang.Double.class);
+                        m.invoke(obj, Double.parseDouble(propertiedValue));
+                    }else if (type.equals("double")){
+                        Method m = clz.getMethod("set" + name, double.class);
+                        m.invoke(obj, Double.parseDouble(propertiedValue));
                     }
                 }catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
                     throw new ValueInjectionException("值注入异常",e.getCause());
