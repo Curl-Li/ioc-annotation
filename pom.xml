@@ -8,14 +8,6 @@
     <artifactId>ioc-annotation</artifactId>
     <version>1.0.0</version>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>1.25</version>
-        </dependency>
-    </dependencies>
-
     <build>
         <plugins>
             <plugin>

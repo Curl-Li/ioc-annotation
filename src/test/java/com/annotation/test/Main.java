@@ -4,10 +4,7 @@ import com.annotation.AnnotationUtil;
 import com.annotation.annotations.Autowired;
 import com.annotation.annotations.Component;
 import com.annotation.enums.EnvironmentType;
-import com.annotation.exceptions.AnnotationInjectionException;
-import com.annotation.exceptions.ScanPackageException;
-import com.annotation.exceptions.ValueInjectionException;
-import com.annotation.util.PropertiesUtils;
+import com.annotation.exceptions.*;
 
 @Component
 public class Main {
@@ -18,9 +15,9 @@ public class Main {
     @Autowired
     private static TestBeanComponent testBeanComponent;
 
-    public static void main(String[] args) throws AnnotationInjectionException, ScanPackageException, ValueInjectionException {
+    public static void main(String[] args) throws AnnotationInjectionException, ScanPackageException, ValueInjectionException, PropertiesHandlerNotImplements, PropertiesHandlerLoadError {
 
-        PropertiesUtils.setFilename("src/main/resources/config.yml");
+        PropertiesHandlerImpl.setFilename("src/main/resources/config.yml");
 
         AnnotationUtil.init(EnvironmentType.DEVELOPMENT,Main.class);
 

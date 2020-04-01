@@ -5,14 +5,11 @@ import com.annotation.annotations.Bean;
 import com.annotation.annotations.Component;
 import com.annotation.annotations.Value;
 import com.annotation.enums.EnvironmentType;
-import com.annotation.exceptions.AnnotationInjectionException;
-import com.annotation.exceptions.ScanPackageException;
-import com.annotation.exceptions.ValueInjectionException;
+import com.annotation.exceptions.*;
 import com.annotation.model.Container;
-import com.annotation.util.PropertiesUtils;
+import com.annotation.util.PropertiesHandler;
 import com.annotation.util.ScanUtil;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -22,6 +19,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class AnnotationUtil {
+
+    private static PropertiesHandler propertiesHandler;
 
     //包路径
     private static String packagePath;
@@ -38,7 +37,7 @@ public class AnnotationUtil {
      * @throws AnnotationInjectionException 注解注入异常
      * @throws ValueInjectionException 值注入异常
      */
-    private static void analyse() throws ScanPackageException, AnnotationInjectionException, ValueInjectionException {
+    private static void analyse() throws ScanPackageException, AnnotationInjectionException, ValueInjectionException, PropertiesHandlerNotImplements, PropertiesHandlerLoadError {
 
         List<Class<?>> classes;
 
@@ -52,6 +51,9 @@ public class AnnotationUtil {
         }catch (ClassNotFoundException | IOException ex){
             throw new ScanPackageException("包扫描异常",ex.getCause());
         }
+
+        //扫描装载PropertiesHandler
+        propertiesHandler= findPropertiesHandler(classes);
 
 
         //扫描加载Bean加入容器
@@ -68,6 +70,33 @@ public class AnnotationUtil {
                 Container.getInstance().registerBean(component);
             }
         }
+
+    }
+
+    /**
+     * 扫描包装在Value处理类
+     * @param classes 类集合
+     * @return Value处理类实例
+     * @throws PropertiesHandlerNotImplements 未找到实现类
+     * @throws PropertiesHandlerLoadError 实现类装载错误
+     */
+    private static PropertiesHandler findPropertiesHandler(List<Class<?>> classes) throws PropertiesHandlerNotImplements, PropertiesHandlerLoadError {
+
+        for (Class<?> c :
+                classes) {
+            if(c.isInterface()){
+                continue;
+            }
+            if (PropertiesHandler.class.isAssignableFrom(c)){
+                try {
+                    return (PropertiesHandler) c.newInstance();
+                } catch (IllegalAccessException | InstantiationException e) {
+                    throw new PropertiesHandlerLoadError("值处理类装载失败",e.getCause());
+                }
+            }
+        }
+
+        throw new PropertiesHandlerNotImplements("未扫描到值处理类");
 
     }
 
@@ -160,7 +189,7 @@ public class AnnotationUtil {
                     // 获取注解的值
                     String value = valueAnnoation.value();
                     // 通过注解设置的值获取properties的值
-                    String propertiedValue = Objects.requireNonNull(PropertiesUtils.getInstance().get(value));
+                    String propertiedValue = Objects.requireNonNull(propertiesHandler.get(value));
                     // 获取属性的名字
                     String name = field.getName();
                     // 将属性的首字符大写， 构造get，set方法
@@ -216,7 +245,7 @@ public class AnnotationUtil {
                         Method m = clz.getMethod("set" + name, java.util.Date.class);
                         m.invoke(obj, propertiedValue);
                     }
-                }catch (FileNotFoundException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+                }catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
                     throw new ValueInjectionException("值注入异常",e.getCause());
                 }
 
@@ -277,7 +306,7 @@ public class AnnotationUtil {
      * @throws ScanPackageException 包扫描异常
      * @throws ValueInjectionException 值注入异常
      */
-    public static void init(Class<?> mainClass) throws AnnotationInjectionException, ScanPackageException, ValueInjectionException {
+    public static void init(Class<?> mainClass) throws AnnotationInjectionException, ScanPackageException, ValueInjectionException, PropertiesHandlerNotImplements, PropertiesHandlerLoadError {
         AnnotationUtil.mainClass=mainClass;
         packagePath = mainClass.getPackage().getName();
         analyse();
@@ -290,7 +319,7 @@ public class AnnotationUtil {
      * @throws ScanPackageException 包扫描异常
      * @throws ValueInjectionException 值注入异常
      */
-    public static void init(String packagePath) throws AnnotationInjectionException, ScanPackageException, ValueInjectionException {
+    public static void init(String packagePath) throws AnnotationInjectionException, ScanPackageException, ValueInjectionException, PropertiesHandlerNotImplements, PropertiesHandlerLoadError {
         AnnotationUtil.packagePath = packagePath;
         analyse();
     }
@@ -303,7 +332,7 @@ public class AnnotationUtil {
      * @throws ScanPackageException 包扫描异常
      * @throws ValueInjectionException 值注入异常
      */
-    public static void init(EnvironmentType environmentType,Class<?> mainClass) throws AnnotationInjectionException, ScanPackageException, ValueInjectionException {
+    public static void init(EnvironmentType environmentType,Class<?> mainClass) throws AnnotationInjectionException, ScanPackageException, ValueInjectionException, PropertiesHandlerNotImplements, PropertiesHandlerLoadError {
         AnnotationUtil.mainClass=mainClass;
         packagePath = mainClass.getPackage().getName();
         AnnotationUtil.environmentType=environmentType;
@@ -318,7 +347,7 @@ public class AnnotationUtil {
      * @throws ScanPackageException 包扫描异常
      * @throws ValueInjectionException 值注入异常
      */
-    public static void init(EnvironmentType environmentType,String packagePath) throws AnnotationInjectionException, ScanPackageException, ValueInjectionException {
+    public static void init(EnvironmentType environmentType,String packagePath) throws AnnotationInjectionException, ScanPackageException, ValueInjectionException, PropertiesHandlerNotImplements, PropertiesHandlerLoadError {
         AnnotationUtil.packagePath = packagePath;
         AnnotationUtil.environmentType=environmentType;
         analyse();

@@ -1,5 +1,6 @@
-package com.annotation.util;
+package com.annotation.test;
 
+import com.annotation.util.PropertiesHandler;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
@@ -9,11 +10,9 @@ import java.io.FileReader;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class PropertiesUtils {
+public class PropertiesHandlerImpl implements PropertiesHandler {
 
     private final static DumperOptions OPTIONS = new DumperOptions();
-
-    private volatile static PropertiesUtils configUtil = null;
 
     private static LinkedHashMap<String,String> data;
 
@@ -28,7 +27,7 @@ public class PropertiesUtils {
      * 初始化配置类
      * @throws FileNotFoundException 文件不存在
      */
-    private PropertiesUtils() throws FileNotFoundException {
+    public PropertiesHandlerImpl() throws FileNotFoundException {
 
         if(null==filename||"".equals(filename)){
             throw new FileNotFoundException("FileName Of Config Is NULL");
@@ -47,7 +46,7 @@ public class PropertiesUtils {
      * @param filename 文件路径
      */
     public static void setFilename(String filename) {
-        PropertiesUtils.filename = filename;
+        PropertiesHandlerImpl.filename = filename;
     }
 
 
@@ -83,28 +82,14 @@ public class PropertiesUtils {
 
     }
 
-    /**
-     * 取配置类实体
-     * @return 配置类实体
-     */
-    public static PropertiesUtils getInstance() throws FileNotFoundException {
-        if(null==configUtil) {
-            synchronized (PropertiesUtils.class){
-                if(null==configUtil){
-                    configUtil=new PropertiesUtils();
-                }
-            }
-        }
-        return configUtil;
-    }
-
 
     /**
      * 取键对应的值
      * @param key 键
      * @return 值
      */
-    public String get(String key){
+    @Override
+    public String get(String key) {
         return data.get(key);
     }
 
