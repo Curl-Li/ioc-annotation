@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5915b3e4-f449-4be9-a1c6-df52593a56ff" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/annotation/AnnotationUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/annotation/AnnotationUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +114,7 @@
       <workItem from="1585552792951" duration="1775000" />
       <workItem from="1585617565791" duration="7924000" />
       <workItem from="1585627729580" duration="15037000" />
-      <workItem from="1585706399013" duration="8121000" />
+      <workItem from="1585706399013" duration="8165000" />
     </task>
     <servers />
   </component>
