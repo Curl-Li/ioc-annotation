@@ -9,7 +9,7 @@ By Curl-Li
 
 ## 项目流程图
 
-![rtmp](https://hfaisccenter.com:8080/rtmp.png)
+![rtmp](https://github.com/Curl-Li/ioc-annotation/blob/develop/screenshot/ioc.png)
 
 ## 使用说明
 
