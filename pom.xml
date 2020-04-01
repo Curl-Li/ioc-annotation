@@ -6,7 +6,7 @@
 
     <groupId>com.curl-li.ioc-annotation</groupId>
     <artifactId>ioc-annotation</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <build>
         <plugins>
